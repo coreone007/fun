@@ -1,42 +1,47 @@
 package com.hero.fun.models;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import org.hibernate.annotations.GenericGenerator;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
+@Setter
+@Getter
 @ToString
 @Table(name = "Product")
 public class Product implements Serializable{
 
 	private static final long serialVersionUID = -3707120946496439012L;
 	
-	public Product() {};
-	
-	public Product(long categoryid, String name, String desc) {
-		this.categoryid = categoryid;
-		this.typename = name;
-		this.description = desc;
-	}
-
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+	private UUID id;
 	
-	@Getter @Setter @Column(name = "categoryid")
-	private long categoryid;
+	@ManyToOne
+    @JoinColumn(name = "categoryid")
+    private Category category;
 	
-	@Getter @Setter @Column(name = "typename")
+	@Column(name = "typename")
 	private String typename;
 	
-	@Getter @Setter @Column(name = "description")
+	@Column(name = "description")
 	private String description;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 }
